@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Application Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/styles/main.css">
+    <link rel="stylesheet" href="/src/styles/navigation.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                fontFamily: {
+                    sans: ['Inter', 'sans-serif'],
+                },
+                extend: {
+                    fontSize: {
+                        'xs': '0.875rem', // 10px
+                        'sm': '0.75rem',  // 12px
+                        'base': '0.875rem', // 14px
+                        'lg': '1rem',    // 16px
+                        'xl': '1.125rem', // 18px
+                        '2xl': '1.25rem', // 20px
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .bg-loan-pattern {
+                background-image: url('https://images.unsplash.com/photo-1601597111158-2fceff292cdc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+                background-size: cover;
+                background-position: center;
+                background-blend-mode: overlay;
+            }
+            .navigation-bar {
+                @apply bg-white shadow-md;
+            }
+            .logo img {
+                @apply h-12;
+            }
+        }
+    </style>
+</head>
+<body class="bg-loan-pattern bg-gray-900/50 min-h-screen flex flex-col">
+   <!-- navigation starts -->
+   <div class="navigation-bar">
+    <div class="logo">
+        <img src="/Public/assets/Images/spectrum-credit-logo-brighter transsparent (1).png" alt="spectrum logo">
+    </div>
+
+    <!-- Nav Right -->
+    <div id="navbar-container">Loading navigation...</div>
+</div>
+
+<script>
+    const possiblePaths = [
+        '/components/navbar.html',
+        '/src/components/navbar.html',
+        './components/navbar.html',
+        '../components/navbar.html'
+    ];
+    
+    async function loadNavbar() {
+        for (const path of possiblePaths) {
+            try {
+                const response = await fetch(path);
+                if (response.ok) {
+                    document.getElementById('navbar-container').innerHTML = await response.text();
+                    console.log(`Navbar loaded successfully from: ${path}`);
+                    return;
+                }
+            } catch (error) {
+                console.log(`Attempt failed for path: ${path}`, error);
+            }
+        }
+        document.getElementById('navbar-container').innerHTML = 
+            '<div class="error">Navigation failed to load</div>';
+    }
+
+    loadNavbar();
+</script>
+    <!-- End of navigation -->
+
+    <!-- Main Content -->
+    <div class="flex-grow flex items-center justify-center p-4">
+        <div class="container max-w-6xl">
+            <div class="flex flex-col md:flex-row gap-6 backdrop-blur-sm bg-white/90 rounded-xl shadow-2xl overflow-hidden">
+                <!-- Loan Summary Section -->
+                <div class="w-full md:w-1/2 p-8 bg-gradient-to-br from-blue-600 to-blue-800 text-white">
+                    <h2 class="text-2xl font-bold mb-4">Loan Summary</h2>
+                    <p class="text-sm opacity-90 mb-6">The following are the details of your Loan</p>
+                    
+                    <div class="space-y-5">
+                        <div class="pb-3 border-b border-blue-500/30">
+                            <p class="text-xs font-medium opacity-80">Loan Amount</p>
+                            <p class="text-xl font-semibold">K0.00</p>
+                        </div>
+                        
+                        <div class="pb-3 border-b border-blue-500/30">
+                            <p class="text-xs font-medium opacity-80">Tenure (months)</p>
+                            <p class="text-xl font-semibold">0</p>
+                        </div>
+                        
+                        <div class="pb-3 border-b border-blue-500/30">
+                            <p class="text-xs font-medium opacity-80">Withheld Amount</p>
+                            <p class="text-xl font-semibold">K0.00</p>
+                        </div>
+                        
+                        <div class="pb-3 border-b border-blue-500/30">
+                            <p class="text-xs font-medium opacity-80">Amount You Receive</p>
+                            <p class="text-xl font-semibold">K0.00</p>
+                        </div>
+                        
+                        <div class="pb-3 border-b border-blue-500/30">
+                            <p class="text-xs font-medium opacity-80">Monthly repayment</p>
+                            <p class="text-xl font-semibold">K0.00</p>
+                        </div>
+                        
+                        <div>
+                            <p class="text-xs font-medium opacity-80">Next Payment</p>
+                            <p class="text-xl font-semibold">--</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-5 border-t border-blue-500/30">
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-xs">Your information is securely encrypted</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Loan Form Section -->
+                <div class="w-full md:w-1/2 p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Complete your application</h2>
+                    
+                    <form class="space-y-4">
+                        <div>
+                            <label for="loan-amount" class="block text-xs font-medium text-gray-600 mb-1 uppercase tracking-wider">
+                                How much do you want to borrow?
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <span class="text-gray-500 text-sm">K</span>
+                                </div>
+                                <input type="number" id="loan-amount" name="loan-amount" min="0" 
+                                       class="w-full pl-8 px-4 py-2 text-sm border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label for="employee-number" class="block text-xs font-medium text-gray-600 mb-1 uppercase tracking-wider">
+                                Employee Number
+                            </label>
+                            <input type="text" id="employee-number" name="employee-number" 
+                                   class="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+                        </div>
+                        
+                        <div>
+                            <label for="nrc-number" class="block text-xs font-medium text-gray-600 mb-1 uppercase tracking-wider">
+                                NRC Number
+                            </label>
+                            <input type="text" id="nrc-number" name="nrc-number" 
+                                   class="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+                        </div>
+                        
+                        <div>
+                            <label for="loan-tenure" class="block text-xs font-medium text-gray-600 mb-1 uppercase tracking-wider">
+                                How many months (1 - 60)?
+                            </label>
+                            <input type="number" id="loan-tenure" name="loan-tenure" min="1" max="60" 
+                                   class="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+                        </div>
+                        
+                        <div>
+                            <label for="loan-reason" class="block text-xs font-medium text-gray-600 mb-1 uppercase tracking-wider">
+                                Reason for Borrowing
+                            </label>
+                            <textarea id="loan-reason" name="loan-reason" rows="3" 
+                                   class="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"></textarea>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex items-center h-5">
+                                <input id="terms" name="terms" type="checkbox" 
+                                       class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded transition duration-200" required>
+                            </div>
+                            <div class="ml-3 text-xs">
+                                <label for="terms" class="font-medium text-gray-600">
+                                    By checking this box you have read and you accept our Terms and Conditions
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" 
+                                class="w-full flex justify-center items-center py-3 px-6 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200 transform hover:-translate-y-0.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Submit Application
+                        </button>
+                    </form>
+
+                    <div class="mt-6 pt-4 border-t border-gray-200">
+                        <p class="text-xs text-gray-500 text-center">Need help? <a href="#" class="text-blue-600 hover:text-blue-800">Contact our support team</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer-container" class="bg-gray-800 text-white py-6"></div>
+
+    <!-- Scripts -->
+    <script>
+        // Load navigation bar
+        fetch('../src/components/navbar.html')
+            .then(res => res.text())
+            .then(data => {
+                document.getElementById('navbar-container').innerHTML = data;
+            })
+            .catch(err => console.error('Failed to load navigation:', err));
+
+        // Load footer
+        fetch('/src/components/footer.html')
+            .then(res => {
+                if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+                return res.text();
+            })
+            .then(data => {
+                document.getElementById('footer-container').innerHTML = data;
+            })
+            .catch(err => console.error('Failed to load footer:', err));
+    </script>
+</body>
+</html>

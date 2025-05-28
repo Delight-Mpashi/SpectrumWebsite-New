@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Branch Locator | Spectrum Credit</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <style>
+    #map { height: 400px; }
+    .location-card:hover { transform: translateY(-5px); }
+    .loader {
+      border-top-color: #1d62e3;
+      animation: spinner 1s linear infinite;
+    }
+    @keyframes spinner {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .user-location-marker {
+      background-color: #1d62e3;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid white;
+      box-shadow: 0 0 0 3px rgba(29, 98, 227, 0.3);
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Navigation and header remain the same as previous example -->
+
+  <!-- Main Content -->
+  <div class="container mx-auto px-4 py-8">
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">Find a Branch Near You</h1>
+      <p class="text-gray-600 max-w-2xl mx-auto">
+        We'll show you Spectrum Credit branches within 50km of your location
+      </p>
+    </div>
+
+    <!-- Search Box -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+      <div class="flex flex-col md:flex-row gap-4">
+        <div class="flex-1 relative">
+          <input type="text" id="searchInput" placeholder="Enter city, town or postal code" 
+                 class="w-full border border-gray-300 rounded-lg py-3 px-4 pl-10 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i>
+        </div>
+        <button id="currentLocationBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center">
+          <i class="fas fa-location-arrow mr-2"></i> Use My Location
+        </button>
+      </div>
+    </div>
+
+    <!-- Map and Results -->
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- Map Container -->
+      <div class="lg:w-2/3">
+        <div id="map" class="rounded-xl shadow-lg border border-gray-200"></div>
+        <div class="mt-2 text-sm text-gray-500">
+          <i class="fas fa-info-circle text-blue-500 mr-1"></i> Blue circle shows 50km radius from your location
+        </div>
+      </div>
+      
+      <!-- Results List -->
+      <div class="lg:w-1/3">
+        <div class="bg-white rounded-xl shadow-lg p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-semibold text-gray-800">Nearby Branches</h3>
+            <span id="resultCount" class="bg-blue-100 text-blue-800 text-sm px-2 py-1 rounded-full">0 found</span>
+          </div>
+          
+          <div id="loader" class="flex justify-center py-8 hidden">
+            <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
+          </div>
+          
+          <div id="resultsContainer" class="space-y-4">
+            <!-- Will be populated by JavaScript -->
+          </div>
+          
+          <div id="noResults" class="hidden text-center py-8">
+            <i class="fas fa-map-marker-slash text-4xl text-gray-300 mb-3"></i>
+            <p class="text-gray-500">No branches found within 50km</p>
+            <button id="tryAgainBtn" class="mt-4 text-blue-600 hover:text-blue-800 font-medium">
+              Try Again
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer remains the same as previous example -->
+
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize map
+      const map = L.map('map').setView([-15.4167, 28.2833], 6); // Default Zambia view
+      
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      // Sample branch data (replace with real data from your backend)
+      const branches = [
+        {
+          id: 1,
+          name: "Lusaka Head Office",
+          address: "123 Business Park, Lusaka",
+          phone: "+260 211 123 456",
+          hours: "Mon-Fri: 7:30 AM - 4:00 PM",
+          lat: -15.439873817762173,
+          lng:  28.344352531535215
+        },
+        {
+          id: 2,
+          name: "East-Park Branch",
+          address: "Thabo Mbeki Road, Lusaka",
+          phone: "+260 212 345 678",
+          hours: "Mon-Fri: 7:30 AM - 4:30 PM",
+          lat: -15.391821354568703,
+          lng: 28.320809953858557
+        },
+        {
+          id: 3,
+          name: "CBD Branch",
+          address: "Central Park, Lusaka",
+          phone: "+260 213 456 789",
+          hours: "Mon-Fri: 7:30 AM - 4:30 PM",
+          lat: -15.415639842738269,
+          lng: 28.28183509606268
+        },
+        {
+          id: 4,
+          name: "Ndola Branch",
+          address: "321 Copperbelt Avenue, Kitwe",
+          phone: "+260 214 567 890",
+          hours: "Mon-Fri: 8:00 AM - 4:00 PM",
+          lat: -15.415240104050907,
+          lng: 28.277712911533204
+        },
+        {
+          id: 5,
+          name: "Kabwe Branch",
+          address: "654 Railway Road, Kabwe",
+          phone: "+260 215 678 901",
+          hours: "Mon-Fri: 8:30 AM - 4:30 PM",
+          lat: -14.4333,
+          lng: 28.4500
+        }
+      ];
+
+      // Variables to track user location and radius circle
+      let userLocation = null;
+      let radiusCircle = null;
+      const searchRadiusKm = 50; // 50km radius
+
+      // Function to calculate distance between two coordinates in km (Haversine formula)
+      function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // Earth's radius in km
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = 
+          Math.sin(dLat/2) * Math.sin(dLat/2) +
+          Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+          Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
+      }
+
+      // Function to find branches within radius
+      function findNearbyBranches(userLat, userLng, radiusKm) {
+        return branches.filter(branch => {
+          const distance = calculateDistance(userLat, userLng, branch.lat, branch.lng);
+          branch.distance = distance;
+          return distance <= radiusKm;
+        }).sort((a, b) => a.distance - b.distance);
+      }
+
+      // Function to format distance for display
+      function formatDistance(km) {
+        if (km < 1) {
+          return `${Math.round(km * 1000)} meters away`;
+        } else {
+          return `${km.toFixed(1)} km away`;
+        }
+      }
+
+      // Geolocation function
+      document.getElementById('currentLocationBtn').addEventListener('click', function() {
+        const loader = document.getElementById('loader');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const noResults = document.getElementById('noResults');
+        
+        // Show loading state
+        loader.classList.remove('hidden');
+        resultsContainer.classList.add('hidden');
+        noResults.classList.add('hidden');
+        
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            function(position) {
+              // Success callback
+              userLocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+              };
+              
+              // Center map on user's location
+              map.setView([userLocation.lat, userLocation.lng], 10);
+              
+              // Remove previous radius circle if exists
+              if (radiusCircle) {
+                map.removeLayer(radiusCircle);
+              }
+              
+              // Add radius circle (50km)
+              radiusCircle = L.circle([userLocation.lat, userLocation.lng], {
+                radius: searchRadiusKm * 1000, // meters
+                color: '#1d62e3',
+                fillColor: '#1d62e3',
+                fillOpacity: 0.1
+              }).addTo(map);
+              
+              // Add user location marker
+              L.marker([userLocation.lat, userLocation.lng], {
+                icon: L.divIcon({
+                  className: 'user-location-marker',
+                  html: '',
+                  iconSize: [16, 16]
+                })
+              }).addTo(map).bindPopup('Your Location').openPopup();
+              
+              // Find nearby branches
+              const nearbyBranches = findNearbyBranches(userLocation.lat, userLocation.lng, searchRadiusKm);
+              
+              // Update UI with results
+              setTimeout(() => {
+                loader.classList.add('hidden');
+                displayResults(nearbyBranches);
+                
+                // Add markers for nearby branches
+                nearbyBranches.forEach(branch => {
+                  L.marker([branch.lat, branch.lng], {
+                    icon: L.icon({
+                      iconUrl: 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png',
+                      iconSize: [25, 41],
+                      iconAnchor: [12, 41],
+                      popupAnchor: [1, -34]
+                    })
+                  }).addTo(map)
+                    .bindPopup(`<b>${branch.name}</b><br>${formatDistance(branch.distance)}`);
+                });
+              }, 1000);
+            },
+            function(error) {
+              // Error callback
+              loader.classList.add('hidden');
+              let errorMessage = "Unable to retrieve your location.";
+              switch(error.code) {
+                case error.PERMISSION_DENIED:
+                  errorMessage = "Location access was denied. Please enable location services in your browser settings.";
+                  break;
+                case error.POSITION_UNAVAILABLE:
+                  errorMessage = "Location information is unavailable.";
+                  break;
+                case error.TIMEOUT:
+                  errorMessage = "The request to get your location timed out.";
+                  break;
+              }
+              alert(errorMessage);
+            },
+            {
+              enableHighAccuracy: true,
+              timeout: 5000,
+              maximumAge: 0
+            }
+          );
+        } else {
+          loader.classList.add('hidden');
+          alert("Geolocation is not supported by your browser. Please search manually.");
+        }
+      });
+
+      // Display results function
+      function displayResults(branches) {
+        const resultsContainer = document.getElementById('resultsContainer');
+        const noResults = document.getElementById('noResults');
+        const resultCount = document.getElementById('resultCount');
+        
+        resultsContainer.innerHTML = '';
+        
+        if (branches.length === 0) {
+          noResults.classList.remove('hidden');
+          resultCount.textContent = '0 found';
+          return;
+        }
+        
+        resultCount.textContent = `${branches.length} found`;
+        
+        branches.forEach(branch => {
+          const branchCard = document.createElement('div');
+          branchCard.className = 'location-card bg-gray-50 rounded-lg p-4 border border-gray-200 transition duration-300';
+          branchCard.innerHTML = `
+            <h4 class="font-semibold text-lg text-gray-800">${branch.name}</h4>
+            <p class="text-gray-600 mt-1"><i class="fas fa-map-marker-alt text-blue-500 mr-2"></i> ${branch.address}</p>
+            <p class="text-gray-600 mt-1"><i class="fas fa-phone-alt text-blue-500 mr-2"></i> ${branch.phone}</p>
+            <p class="text-gray-600 mt-1"><i class="fas fa-clock text-blue-500 mr-2"></i> ${branch.hours}</p>
+            <div class="mt-3 flex justify-between items-center">
+              <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">${formatDistance(branch.distance)}</span>
+              <button class="text-blue-600 hover:text-blue-800 text-sm font-medium" 
+                      onclick="showDirections(${branch.lat}, ${branch.lng})">
+                Directions <i class="fas fa-arrow-right ml-1"></i>
+              </button>
+            </div>
+          `;
+          resultsContainer.appendChild(branchCard);
+        });
+      }
+
+      // Search functionality (now searches your sample data)
+      document.getElementById('searchInput').addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+          const searchTerm = this.value.toLowerCase();
+          if (searchTerm.trim() === '') return;
+          
+          const filteredBranches = branches.filter(branch => 
+            branch.name.toLowerCase().includes(searchTerm) || 
+            branch.address.toLowerCase().includes(searchTerm)
+          );
+          
+          displayResults(filteredBranches);
+          
+          if (filteredBranches.length > 0) {
+            const firstBranch = filteredBranches[0];
+            map.setView([firstBranch.lat, firstBranch.lng], 12);
+          }
+        }
+      });
+
+      // Try again button
+      document.getElementById('tryAgainBtn').addEventListener('click', function() {
+        if (userLocation) {
+          document.getElementById('currentLocationBtn').click();
+        } else {
+          document.getElementById('noResults').classList.add('hidden');
+          document.getElementById('resultsContainer').classList.remove('hidden');
+          displayResults([]);
+        }
+      });
+    });
+
+    // Global function for directions
+    function showDirections(lat, lng) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            const userLat = position.coords.latitude;
+            const userLng = position.coords.longitude;
+            const url = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${lat},${lng}&travelmode=driving`;
+            window.open(url, '_blank');
+          },
+          function() {
+            // If user denies location, just show the destination
+            const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`;
+            window.open(url, '_blank');
+          }
+        );
+      } else {
+        const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`;
+        window.open(url, '_blank');
+      }
+    }
+  </script>
+</body>
+</html>

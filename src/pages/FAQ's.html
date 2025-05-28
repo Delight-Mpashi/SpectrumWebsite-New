@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAQs | Spectrum Credit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <link rel="stylesheet" href="/src/styles/navigation.css" />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap");
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      .faq-container {
+        background: linear-gradient(to bottom, #f9fafb 0%, #ffffff 100px);
+      }
+      .faq-item {
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      .faq-item:hover {
+        transform: translateY(-2px);
+      }
+      .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+      .faq-item.active .faq-answer {
+        max-height: 500px;
+      }
+      .rotate-icon {
+        transition: transform 0.3s ease;
+      }
+      .faq-item.active .rotate-icon {
+        transform: rotate(180deg);
+      }
+      /* Hero image section */
+      .hero-image {
+        height: 300px;
+        background-image: url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      .hero-image::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      .hero-content {
+        position: relative;
+        z-index: 1;
+        color: white;
+        text-align: center;
+        padding: 0 20px;
+      }
+      /* Footer specific styles */
+      .footer-section {
+        background-color: #1e293b;
+        color: #f8fafc;
+      }
+      .footer-content a {
+        color: #93c5fd;
+        transition: color 0.2s;
+      }
+      .footer-content a:hover {
+        color: #60a5fa;
+      }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- navigation starts -->
+    <div class="navigation-bar">
+      <div class="logo">
+        <img
+          src="/Public/assets/Images/spectrum-credit-logo-brighter transsparent (1).png"
+          alt="spectrum logo"
+        />
+      </div>
+
+      <!-- Nav Right -->
+      <div id="navbar-container">Loading navigation...</div>
+    </div>
+
+    <script>
+      const possiblePaths = [
+        "/components/navbar.html",
+        "/src/components/navbar.html",
+        "./components/navbar.html",
+        "../components/navbar.html",
+      ];
+
+      async function loadNavbar() {
+        for (const path of possiblePaths) {
+          try {
+            const response = await fetch(path);
+            if (response.ok) {
+              document.getElementById("navbar-container").innerHTML =
+                await response.text();
+              console.log(`Navbar loaded successfully from: ${path}`);
+              return;
+            }
+          } catch (error) {
+            console.log(`Attempt failed for path: ${path}`, error);
+          }
+        }
+        document.getElementById("navbar-container").innerHTML =
+          '<div class="error">Navigation failed to load</div>';
+      }
+
+      loadNavbar();
+    </script>
+    <!-- End of navigation -->
+
+    <!-- Hero Image Section -->
+    <div class="hero-image">
+      <div class="hero-content">
+        <h1 class="text-4xl font-bold mb-4">Frequently Asked Questions</h1>
+        <p class="text-xl max-w-2xl mx-auto">Find answers to common questions about our services</p>
+      </div>
+    </div>
+
+    <div class="min-h-screen faq-container">
+      <div class="max-w-3xl mx-auto px-5 py-12">
+        <!-- Search Bar -->
+        <div class="mb-10">
+          <div class="relative">
+            <input
+              type="text"
+              placeholder="Search questions..."
+              class="w-full py-3 px-4 pr-10 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            />
+            <div class="absolute right-3 top-3 text-gray-400">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ Content -->
+        <div class="space-y-4">
+          <!-- FAQ Category 1 -->
+          <div class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 pb-2 border-b border-gray-200">Account Questions</h2>
+            
+            <div class="space-y-4">
+              <!-- FAQ Item 1 -->
+              <div class="faq-item bg-white rounded-xl shadow-sm overflow-hidden" onclick="toggleFAQ(this)">
+                <div class="p-6 flex justify-between items-center">
+                  <h3 class="text-lg font-medium text-gray-900">How do I create an account?</h3>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 rotate-icon text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+                <div class="faq-answer px-6 pb-6">
+                  <p class="text-gray-600">You can create an account by visiting our website and clicking on the "Sign Up" button. You'll need to provide some basic information including your name, email address, and phone number. After verification, your account will be ready to use.</p>
+                </div>
+              </div>
+
+              <!-- FAQ Item 2 -->
+              <div class="faq-item bg-white rounded-xl shadow-sm overflow-hidden" onclick="toggleFAQ(this)">
+                <div class="p-6 flex justify-between items-center">
+                  <h3 class="text-lg font-medium text-gray-900">What should I do if I forget my password?</h3>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 rotate-icon text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+                <div class="faq-answer px-6 pb-6">
+                  <p class="text-gray-600">Click on the "Forgot Password" link on the login page. You'll receive an email with instructions to reset your password. If you don't see the email, please check your spam folder.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Category 2 -->
+          <div class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 pb-2 border-b border-gray-200">Loan Questions</h2>
+            
+            <div class="space-y-4">
+              <!-- FAQ Item 3 -->
+              <div class="faq-item bg-white rounded-xl shadow-sm overflow-hidden" onclick="toggleFAQ(this)">
+                <div class="p-6 flex justify-between items-center">
+                  <h3 class="text-lg font-medium text-gray-900">What are the requirements to apply for a loan?</h3>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 rotate-icon text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+                <div class="faq-answer px-6 pb-6">
+                  <p class="text-gray-600">To apply for a loan, you must:</p>
+                  <ul class="list-disc pl-5 mt-2 space-y-1 text-gray-600">
+                    <li>Be at least 18 years old</li>
+                    <li>Have a valid government-issued ID</li>
+                    <li>Provide proof of income</li>
+                    <li>Have an active bank account</li>
+                    <li>Meet our creditworthiness criteria</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- FAQ Item 4 -->
+              <div class="faq-item bg-white rounded-xl shadow-sm overflow-hidden" onclick="toggleFAQ(this)">
+                <div class="p-6 flex justify-between items-center">
+                  <h3 class="text-lg font-medium text-gray-900">How long does loan approval take?</h3>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 rotate-icon text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+                <div class="faq-answer px-6 pb-6">
+                  <p class="text-gray-600">For complete applications with all required documents, approval typically takes 1-2 business days. Some products may offer instant approval for pre-qualified customers.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Category 3 -->
+          <div class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 pb-2 border-b border-gray-200">Security Questions</h2>
+            
+            <div class="space-y-4">
+              <!-- FAQ Item 5 -->
+              <div class="faq-item bg-white rounded-xl shadow-sm overflow-hidden" onclick="toggleFAQ(this)">
+                <div class="p-6 flex justify-between items-center">
+                  <h3 class="text-lg font-medium text-gray-900">How do you protect my personal information?</h3>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 rotate-icon text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+                <div class="faq-answer px-6 pb-6">
+                  <p class="text-gray-600">We use bank-level encryption and security measures to protect your data. All information is stored securely and accessed only by authorized personnel for legitimate business purposes. We comply with all applicable data protection laws including Zambia's Data Protection Act 2021.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Still have questions -->
+          <div class="bg-indigo-50 rounded-xl p-8 text-center">
+            <h3 class="text-xl font-medium text-gray-900 mb-3">Still have questions?</h3>
+            <p class="text-gray-600 mb-4">Can't find the answer you're looking for? Our team is happy to help.</p>
+            <a href="mailto:support@spectrumcredit.co.zm" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition">
+              Contact Support
+              <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 -mr-1 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>   
+    
+    <!-- Footer Section -->
+    <div class="footer-section">
+      <div id="footer-container">
+        <!-- Loading state -->
+        <div class="footer-loading text-center py-8">
+          <div class="animate-pulse flex justify-center items-center space-x-2">
+            <div class="w-4 h-4 bg-slate-500 rounded-full"></div>
+            <div class="w-4 h-4 bg-slate-500 rounded-full"></div>
+            <div class="w-4 h-4 bg-slate-500 rounded-full"></div>
+          </div>
+        </div>
+        <!-- Fallback content if loading fails -->
+        <div class="footer-fallback hidden text-center py-8 px-4">
+          <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+              <div class="mb-4 md:mb-0">
+                <p class="text-slate-300">© 2023 Spectrum Credit. All rights reserved.</p>
+              </div>
+              <div class="flex space-x-4">
+                <a href="#" class="text-slate-300 hover:text-white transition">Privacy Policy</a>
+                <a href="#" class="text-slate-300 hover:text-white transition">Terms of Service</a>
+                <a href="mailto:online@spectrumcredit.co.zm" class="text-slate-300 hover:text-white transition">Contact Us</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <script>
+      // Toggle FAQ items
+      function toggleFAQ(element) {
+        element.classList.toggle('active');
+      }
+
+      // Close other FAQs when one is opened
+      document.querySelectorAll('.faq-item').forEach(item => {
+        item.addEventListener('click', function() {
+          document.querySelectorAll('.faq-item').forEach(otherItem => {
+            if (otherItem !== item && otherItem.classList.contains('active')) {
+              otherItem.classList.remove('active');
+            }
+          });
+        });
+      });
+
+      // Load footer
+      document.addEventListener('DOMContentLoaded', function() {
+        const footerContainer = document.getElementById('footer-container');
+        const loadingElement = footerContainer.querySelector('.footer-loading');
+        const fallbackElement = footerContainer.querySelector('.footer-fallback');
+        
+        const possibleFooterPaths = [
+          '/components/footer.html',
+          '/src/components/footer.html',
+          './components/footer.html',
+          '../components/footer.html'
+        ];
+        
+        async function loadFooter() {
+          for (const path of possibleFooterPaths) {
+            try {
+              const response = await fetch(path);
+              if (response.ok) {
+                const html = await response.text();
+                loadingElement.remove();
+                footerContainer.innerHTML = html;
+                console.log(`Footer loaded successfully from: ${path}`);
+                return;
+              }
+            } catch (error) {
+              console.log(`Attempt failed for path: ${path}`, error);
+            }
+          }
+          // If all paths fail
+          loadingElement.remove();
+          fallbackElement.classList.remove('hidden');
+          console.error('Failed to load footer from all attempted paths');
+        }
+        
+        loadFooter();
+      });
+    </script>
+  </body>
+</html>

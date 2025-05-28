@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            spectrum: {
+              primary: '#1d62e3',
+              secondary: '#4caf50',
+              dark: '#1e293b',
+              light: '#f8fafc',
+              accent: '#f59e0b',
+            }
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          }
+        }
+      }
+    }
+  </script>
+  <title>Spectrum Credit - Loan Application</title>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      scroll-behavior: smooth;
+    }
+    
+    /* Navigation Bar */
+    .navigation-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo img {
+      height: 50px;
+      transition: transform 0.3s ease;
+    }
+    .logo:hover img {
+      transform: scale(1.05);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #334155;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 12px;
+      transition: all 0.3s ease;
+      border-radius: 6px;
+      position: relative;
+    }
+
+    .nav-links a:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: #1d62e3;
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover:after {
+      width: 100%;
+    }
+
+    .nav-links a:hover {
+      color: #1d62e3;
+    }
+
+    /* Dropdown */
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown button {
+      background-color: #1d62e3;
+      color: white;
+      padding: 10px 16px;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dropdown button:hover {
+      background-color: #1a56cb;
+      transform: translateY(-1px);
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: white;
+      min-width: 220px;
+      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+      z-index: 999;
+      border-radius: 8px;
+      overflow: hidden;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dropdown-content a {
+      color: #334155;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .dropdown-content a i {
+      width: 20px;
+      text-align: center;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f1f5f9;
+      color: #1d62e3;
+      padding-left: 20px;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    
+    /* Form styling */
+    .form-box {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Input focus effect */
+    .form-input:focus {
+      box-shadow: 0 0 0 3px rgba(29, 98, 227, 0.2);
+    }
+    
+    /* Step circles */
+    .step-circle {
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .step-circle:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px rgba(29, 98, 227, 0.3);
+    }
+    .step-number {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background-color: #f59e0b;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    
+    /* Loan calculator */
+    .loan-calculator {
+      background: linear-gradient(135deg, #1d62e3 0%, #4caf50 100%);
+    }
+    
+    /* Tooltip */
+    .tooltip {
+      position: relative;
+    }
+    .tooltip-text {
+      visibility: hidden;
+      width: 200px;
+      background-color: #1e293b;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 8px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .navigation-bar {
+        flex-direction: column;
+        padding: 1rem;
+      }
+      .nav-links {
+        margin-top: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      /* Form adjustments */
+      .compact-form {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+      
+      .form-input:focus {
+        box-shadow: 0 0 0 2px rgba(29, 98, 227, 0.2);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <!-- Navigation -->
+  <div class="navigation-bar">
+    <div class="logo">
+      <img src="/Public/assets/Images/spectrum-credit-logo-brighter transsparent (1).png" alt="spectrum logo">
+    </div>
+
+    <!-- Nav Right -->
+    <div id="navbar-container"></div>
+
+<script>
+  fetch('/src/components/navbar.html')
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById('navbar-container').innerHTML = data;
+    });
+</script>
+
+  </div>
+  </div>
+  
+  <div class="relative w-full h-[600px]">
+    <!-- Background Image -->
+    <img src="/Public/assets/Images/dashboardimage.jpg" alt="Happy customer with money" class="w-full h-full object-cover">
+  
+    <!-- Overlay container -->
+    <div class="absolute inset-0 bg-black/40 flex items-center justify-end p-6 sm:p-10">
+      
+      <!-- Form Card -->
+      <form class="w-full max-w-md bg-white/80 backdrop-blur-xl border border-white/40 rounded-2xl shadow-2xl px-8 py-10 space-y-5 mr-0 sm:mr-12 animate-fade-in">
+        
+        <!-- Title -->
+        <h2 class="text-3xl font-extrabold text-gray-800 text-center">Quick Loan Application</h2>
+        <p class="text-sm text-center text-gray-600">Get cash in minutes – fill out the form below.</p>
+  
+        <!-- Loan Type -->
+        <div>
+          <label for="loanType" class="block text-sm font-medium text-gray-700 mb-1">Loan Type</label>
+          <select id="loanType" class="w-full bg-white border border-gray-300 text-sm rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-300">
+            <option disabled selected>Select loan type</option>
+            <option value="civil-servant">Civil Servant</option>
+            <option value="nkwazi-working-capital">Nkwazi Working Capital</option>
+            <option value="sme">SME Business Loan</option>
+          </select>
+        </div>
+  
+        <!-- Amount -->
+        <div>
+          <label for="amount" class="block text-sm font-medium text-gray-700 mb-1">Amount (ZMW)</label>
+          <div class="relative">
+            <span class="absolute left-3 top-3 text-gray-500 text-sm">ZMW</span>
+            <input type="number" id="amount" class="w-full pl-12 pr-4 py-3 text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-300" placeholder="5,000">
+          </div>
+        </div>
+  
+        <!-- Name -->
+        <div>
+          <label for="fullname" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+          <input type="text" id="fullname" class="w-full px-4 py-3 text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-300" placeholder="John Mwansa">
+        </div>
+  
+        <!-- Phone -->
+        <div>
+          <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+          <div class="flex">
+            <span class="inline-flex items-center px-3 text-sm text-gray-500 bg-gray-100 border border-r-0 border-gray-300 rounded-l-xl">+260</span>
+            <input type="tel" id="phone" class="w-full px-4 py-3 text-sm border border-gray-300 rounded-r-xl focus:ring-2 focus:ring-blue-300" placeholder="971234567">
+          </div>
+        </div>
+  
+        <!-- Submit Button -->
+        <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3 rounded-xl transition-all duration-300 shadow-md">
+          Apply Now →
+        </button>
+  
+        <!-- Secure Note -->
+        <p class="text-xs text-gray-500 text-center mt-2 flex items-center justify-center">
+          <i class="fas fa-lock mr-1"></i> Your information is secure
+        </p>
+  
+        <!-- Quick Apply -->
+        <div class="pt-4 border-t border-gray-200 text-center">
+          <p class="text-xs text-gray-600 mb-2">Or apply quickly via:</p>
+          <div class="flex justify-center gap-3">
+            <a href="#" class="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium px-4 py-2 rounded-full transition-all">
+              <i class="fas fa-mobile-alt"></i> USSD
+            </a>
+            <a href="#" class="flex items-center gap-2 bg-green-100 hover:bg-green-200 text-green-800 text-xs font-medium px-4 py-2 rounded-full transition-all">
+              <i class="fab fa-whatsapp"></i> WhatsApp
+            </a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+
+  <!-- Requirements Section -->
+  <div class="requirements w-full bg-white p-12 rounded-lg shadow-sm mt-8 max-w-7xl mx-auto">
+    <h2 class="text-3xl font-bold mb-12 text-center text-gray-800">REQUIREMENTS FOR ELIGIBILITY</h2>
+    <div class="flex justify-center gap-8 p-8 bg-gray-50 rounded-xl flex-wrap">
+      <!-- Box 1 -->
+      <div class="flex flex-col items-center justify-center w-[280px] h-[280px] bg-white shadow-md rounded-xl text-center p-6 transition hover:shadow-lg hover:-translate-y-1">
+        <div class="bg-blue-50 p-4 rounded-full mb-4">
+          <img src="../Public/assets/svg/payslip.svg" alt="Payslip Icon" class="h-12 w-12">
+        </div>
+        <span class="text-lg font-medium text-gray-800">Latest Payslip</span>
+        <p class="text-gray-500 mt-2 text-sm">Submit your most recent payslip as proof of income</p>
+      </div>
+  
+      <!-- Box 2 -->
+      <div class="flex flex-col items-center justify-center w-[280px] h-[280px] bg-white shadow-md rounded-xl text-center p-6 transition hover:shadow-lg hover:-translate-y-1">
+        <div class="bg-blue-50 p-4 rounded-full mb-4">
+          <img src="../Public/assets/svg/nrc.svg" alt="NRC Icon" class="h-12 w-12">
+        </div>
+        <span class="text-lg font-medium text-gray-800">Copy of NRC/Passport</span>
+        <p class="text-gray-500 mt-2 text-sm">Clear copy of your national identification</p>
+      </div>
+  
+      <!-- Box 3 -->
+      <div class="flex flex-col items-center justify-center w-[280px] h-[280px] bg-white shadow-md rounded-xl text-center p-6 transition hover:shadow-lg hover:-translate-y-1">
+        <div class="bg-blue-50 p-4 rounded-full mb-4">
+          <img src="../Public/assets/svg/passportphoto.svg" alt="Photo Icon" class="h-12 w-12">
+        </div>
+        <span class="text-lg font-medium text-gray-800">Passport Photo</span>
+        <p class="text-gray-500 mt-2 text-sm">Recent colored passport-size photograph</p>
+      </div>
+  
+      <!-- Box 4 -->
+      <div class="flex flex-col items-center justify-center w-[280px] h-[280px] bg-white shadow-md rounded-xl text-center p-6 transition hover:shadow-lg hover:-translate-y-1">
+        <div class="bg-blue-50 p-4 rounded-full mb-4">
+          <img src="../Public/assets/svg/bankstatement.svg" alt="Bank Statement Icon" class="h-12 w-12">
+        </div>
+        <span class="text-lg font-medium text-gray-800">Bank Statements</span>
+        <p class="text-gray-500 mt-2 text-sm">3 months of your most recent bank statements</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- How to Apply Section -->
+  <div class="relative w-full h-[600px] bg-gradient-to-br from-spectrum-primary to-blue-600">
+    <!-- Background Image with overlay -->
+    <img src="../Public/assets/Images/background2.jpg" alt="Background" class="w-full h-full object-cover absolute inset-0 mix-blend-overlay opacity-30">
+<!-- Content -->
+<div class="relative z-10 w-full h-full flex flex-col justify-center">
+    <div class="py-12 px-6">
+      <h2 class="text-3xl font-bold text-center text-white mb-12">How to Apply via USSD</h2>
+      <div class="flex justify-center items-center gap-12 flex-wrap">
+        
+        <!-- Step 1 -->
+        <div class="flex flex-col items-center text-center">
+          <div class="step-circle w-[180px] h-[180px] rounded-full overflow-hidden border-4 border-white shadow-lg mb-4 relative">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <img src="../Public/assets/svg/Step 1.png" alt="Step 1" class="max-w-[80%] max-h-[80%] object-contain">
+            </div>
+            <div class="step-number">1</div>
+          </div>
+          <p class="text-lg font-semibold text-white">Dial *619#</p>
+          <p class="text-blue-100 text-sm mt-1 max-w-[160px]">Start by dialing our USSD code</p>
+        </div>
+  
+        <!-- Step 2 -->
+        <div class="flex flex-col items-center text-center">
+          <div class="step-circle w-[180px] h-[180px] rounded-full overflow-hidden border-4 border-white shadow-lg mb-4 relative">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <img src="../Public/assets/svg/Step 2.png" alt="Step 2" class="max-w-[80%] max-h-[80%] object-contain">
+            </div>
+            <div class="step-number">2</div>
+          </div>
+          <p class="text-lg font-semibold text-white">Select Loan Type</p>
+          <p class="text-blue-100 text-sm mt-1 max-w-[160px]">Choose the loan product that suits your needs</p>
+        </div>
+        
+        <!-- Step 3 -->
+        <div class="flex flex-col items-center text-center">
+          <div class="step-circle w-[180px] h-[180px] rounded-full overflow-hidden border-4 border-white shadow-lg mb-4 relative">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <img src="../Public/assets/svg/Step 3.png" alt="Step 3" class="max-w-[80%] max-h-[80%] object-contain">
+            </div>
+            <div class="step-number">3</div>
+          </div>
+          <p class="text-lg font-semibold text-white">Enter Details</p>
+          <p class="text-blue-100 text-sm mt-1 max-w-[160px]">Provide required information and submit your application</p>
+        </div>
+      </div>
+      
+      <!-- CTA Button -->
+      <div class="text-center mt-12">
+        <button class="bg-white text-spectrum-primary font-bold py-3 px-8 rounded-full shadow-lg hover:bg-gray-100 transition duration-300 flex items-center mx-auto">
+          <i class="fas fa-mobile-alt mr-2"></i> Get Started Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Testimonials Section -->
+  <div class="w-full bg-white py-16 px-4">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">What Our Customers Say</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Testimonial 1 -->
+        <div class="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+              <img src="../Public/assets/Images/mary.jpg" alt="Customer" class="w-full h-full object-cover">
+            </div>
+            <div>
+              <h4 class="font-bold">Mary Chanda</h4>
+              <div class="flex text-yellow-400 text-sm">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-600">"I got my loan approved within 24 hours! The process was so simple and the customer service was excellent. Highly recommend Spectrum Credit!"</p>
+        </div>
+        
+        <!-- Testimonial 2 -->
+        <div class="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+              <img src="../Public/assets/Images/john.png" alt="Customer" class="w-full h-full object-cover">
+            </div>
+            <div>
+              <h4 class="font-bold">John Banda</h4>
+              <div class="flex text-yellow-400 text-sm">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-600">"As a small business owner, the Nkwazi Working Capital loan helped me expand my inventory. The repayment terms are very reasonable."</p>
+        </div>
+        
+        <!-- Testimonial 3 -->
+        <div class="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+              <img src="../Public/assets/Images/sarah.png" alt="Customer" class="w-full h-full object-cover">
+            </div>
+            <div>
+              <h4 class="font-bold">Sarah Mwansa</h4>
+              <div class="flex text-yellow-400 text-sm">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-600">"The USSD application is a game changer! I applied for a loan during my lunch break and had the money by evening. So convenient!"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ Section -->
+  <div class="w-full bg-gray-50 py-16 px-4">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Frequently Asked Questions</h2>
+      
+      <div class="space-y-4">
+        <!-- FAQ Item 1 -->
+        <div class="bg-white p-4 rounded-lg shadow-sm">
+          <button class="flex justify-between items-center w-full text-left font-medium text-gray-800">
+            <span>How long does the application process take?</span>
+            <i class="fas fa-chevron-down text-spectrum-primary transition-transform duration-300"></i>
+          </button>
+          <div class="mt-2 text-gray-600 hidden">
+            <p>Most applications are processed within 24-48 hours. If you provide all the required documents and information, we can often approve your loan the same day.</p>
+          </div>
+        </div>
+        
+        <!-- FAQ Item 2 -->
+        <div class="bg-white p-4 rounded-lg shadow-sm">
+          <button class="flex justify-between items-center w-full text-left font-medium text-gray-800">
+            <span>What are the interest rates?</span>
+            <i class="fas fa-chevron-down text-spectrum-primary transition-transform duration-300"></i>
+          </button>
+          <div class="mt-2 text-gray-600 hidden">
+            <p>Interest rates vary depending on the loan product and repayment period. Our rates start from 10% per annum. Use our loan calculator to estimate your repayment amounts.</p>
+          </div>
+        </div>
+        
+        <!-- FAQ Item 3 -->
+        <div class="bg-white p-4 rounded-lg shadow-sm">
+          <button class="flex justify-between items-center w-full text-left font-medium text-gray-800">
+            <span>Can I repay my loan early?</span>
+            <i class="fas fa-chevron-down text-spectrum-primary transition-transform duration-300"></i>
+          </button>
+          <div class="mt-2 text-gray-600 hidden">
+            <p>Yes, you can repay your loan early without any penalties. Early repayment may even qualify you for discounts on future loans.</p>
+          </div>
+        </div>
+        
+        <!-- FAQ Item 4 -->
+        <div class="bg-white p-4 rounded-lg shadow-sm">
+          <button class="flex justify-between items-center w-full text-left font-medium text-gray-800">
+            <span>What if I miss a payment?</span>
+            <i class="fas fa-chevron-down text-spectrum-primary transition-transform duration-300"></i>
+          </button>
+          <div class="mt-2 text-gray-600 hidden">
+            <p>We understand that circumstances change. If you anticipate difficulty making a payment, please contact us immediately to discuss options. Late payments may incur additional charges.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-center mt-8">
+        <a href="#" class="text-spectrum-primary font-medium hover:underline flex items-center justify-center">
+          View all FAQs <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+<!-- Footer Placeholder -->
+<div id="footer-container"></div>
+
+<!-- Load Footer -->
+<script>
+  fetch('/src/components/footer.html')
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+      return res.text();
+    })
+    .then(data => {
+      document.getElementById('footer-container').innerHTML = data;
+    })
+    .catch(err => console.error('Failed to load footer:', err));
+</script>
+
+
+  <!-- Floating WhatsApp Button -->
+  <div class="fixed bottom-6 right-6 z-50">
+    <a href="https://wa.me/260123456789" class="bg-green-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:bg-green-600 transition transform hover:scale-110">
+      <i class="fab fa-whatsapp text-2xl"></i>
+    </a>
+  </div>
+
+  <script>
+    // Loan Calculator Functions
+    function openCalculator() {
+      document.getElementById('calculatorModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeCalculator() {
+      document.getElementById('calculatorModal').classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+    
+    function applyCalculator() {
+      const amount = document.getElementById('calcAmount').value;
+      document.getElementById('amount').value = amount;
+      closeCalculator();
+    }
+    
+    // Update calculator values in real-time
+    document.getElementById('calcAmount').addEventListener('input', function() {
+      document.getElementById('calcAmountValue').textContent = 
+        Number(this.value).toLocaleString();
+      updateCalculations();
+    });
+    
+    document.getElementById('calcTerm').addEventListener('change', updateCalculations);
+    
+    function updateCalculations() {
+      const amount = parseFloat(document.getElementById('calcAmount').value);
+      const term = parseInt(document.getElementById('calcTerm').value);
+      
+      // Simple interest calculation (replace with your actual formula)
+      const interestRate = 0.1; // 10% annual
+      const monthlyRate = interestRate / 12;
+      const totalInterest = amount * monthlyRate * term;
+      const totalRepayment = amount + totalInterest;
+      const monthlyPayment = totalRepayment / term;
+      
+      document.getElementById('monthlyPayment').textContent = 
+        'ZMW ' + monthlyPayment.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      document.getElementById('totalInterest').textContent = 
+        'ZMW ' + totalInterest.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      document.getElementById('totalRepayment').textContent = 
+        'ZMW ' + totalRepayment.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    
+    // Initialize calculator
+    updateCalculations();
+    
+    // FAQ Accordion
+    document.querySelectorAll('.bg-white button').forEach(button => {
+      button.addEventListener('click', () => {
+        const content = button.nextElementSibling;
+        const icon = button.querySelector('i');
+        
+        if (content.classList.contains('hidden')) {
+          content.classList.remove('hidden');
+          icon.classList.add('transform', 'rotate-180');
+        } else {
+          content.classList.add('hidden');
+          icon.classList.remove('transform', 'rotate-180');
+        }
+      });
+    });
+    
+    // Smooth scrolling for navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+</body>
+</html>
