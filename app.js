@@ -1,21 +1,22 @@
 const express = require('express');
 const path = require('path');
-const cors = require('cors');
-
 const app = express();
-const port = process.env.PORT || 3001;
 
-// Enable CORS
-app.use(cors());
+const port = process.env.PORT || 3000;
 
-// Serve static files from "Public" folder
-app.use(express.static(path.join(__dirname, 'Public')));
 
-// Serve index.html at root
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/components', express.static(path.join(__dirname, 'src/components')));
+
+
+app.use('/src', express.static(path.join(__dirname, 'src')));
+
+
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'Public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(port, () => {
-  console.log(`✅ Server running at http://localhost:${port}`);
+  console.log(`Server running on http://localhost:${port}`);
 });
