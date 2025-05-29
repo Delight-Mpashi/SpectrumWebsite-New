@@ -219,24 +219,18 @@
 
     <!-- Scripts -->
     <script>
-        // Load navigation bar
-        fetch('../src/components/navbar.html')
-            .then(res => res.text())
-            .then(data => {
-                document.getElementById('navbar-container').innerHTML = data;
-            })
-            .catch(err => console.error('Failed to load navigation:', err));
-
-        // Load footer
-        fetch('/src/components/footer.html')
-            .then(res => {
-                if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
-                return res.text();
-            })
-            .then(data => {
-                document.getElementById('footer-container').innerHTML = data;
-            })
-            .catch(err => console.error('Failed to load footer:', err));
-    </script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('src/components/footer.html')
+                .then(res => {
+                    if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+                    return res.text();
+                })
+                .then(data => {
+                    document.getElementById('footer-container').innerHTML = data;
+                })
+                .catch(err => console.error('Failed to load footer:', err));
+        });
+        </script>
+        
 </body>
 </html>

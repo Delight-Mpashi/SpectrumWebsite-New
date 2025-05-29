@@ -264,14 +264,14 @@
   <!-- Navigation -->
   <div class="navigation-bar">
     <div class="logo">
-      <img src="../Public/assets/Images/spectrum-credit-logo-brighter transsparent (1).png" alt="spectrum logo">
+      <img src="/Public/assets/Images/spectrum-credit-logo-brighter transsparent (1).png" alt="spectrum logo">
     </div>
 
     <!-- Nav Right -->
     <div id="navbar-container"></div>
 
 <script>
-  fetch('../src/components/navbar.html')
+  fetch('/src/components/navbar.html')
     .then(res => res.text())
     .then(data => {
       document.getElementById('navbar-container').innerHTML = data;
@@ -285,7 +285,7 @@
      <!-- Hero Section with Compact Form -->
   <div class="relative w-full h-[600px]">
     <!-- Background Image -->
-    <img src="../Public/assets/Images/dashboardimage.jpg" alt="Happy customer with money" class="w-full h-full object-cover">
+    <img src="/Public/assets/Images/dashboardimage.jpg" alt="Happy customer with money" class="w-full h-full object-cover">
   
     <!-- Overlay container -->
     <div class="absolute inset-0 bg-black/30 flex items-center justify-end p-4">
@@ -361,7 +361,7 @@
       <!-- Box 1 -->
       <div class="flex flex-col items-center justify-center w-[280px] h-[280px] bg-white shadow-md rounded-xl text-center p-6 transition hover:shadow-lg hover:-translate-y-1">
         <div class="bg-blue-50 p-4 rounded-full mb-4">
-          <img src="../Public/assets/svg/payslip.svg" alt="Payslip Icon" class="h-12 w-12">
+          <img src="/Public/assets/svg/payslip.svg" alt="Payslip Icon" class="h-12 w-12">
         </div>
         <span class="text-lg font-medium text-gray-800">Latest Payslip</span>
         <p class="text-gray-500 mt-2 text-sm">Submit your most recent payslip as proof of income</p>
@@ -370,7 +370,7 @@
       <!-- Box 2 -->
       <div class="flex flex-col items-center justify-center w-[280px] h-[280px] bg-white shadow-md rounded-xl text-center p-6 transition hover:shadow-lg hover:-translate-y-1">
         <div class="bg-blue-50 p-4 rounded-full mb-4">
-          <img src="../Public/assets/svg/nrc.svg" alt="NRC Icon" class="h-12 w-12">
+          <img src="/Public/assets/svg/nrc.svg" alt="NRC Icon" class="h-12 w-12">
         </div>
         <span class="text-lg font-medium text-gray-800">Copy of NRC/Passport</span>
         <p class="text-gray-500 mt-2 text-sm">Clear copy of your national identification</p>
@@ -379,7 +379,7 @@
       <!-- Box 3 -->
       <div class="flex flex-col items-center justify-center w-[280px] h-[280px] bg-white shadow-md rounded-xl text-center p-6 transition hover:shadow-lg hover:-translate-y-1">
         <div class="bg-blue-50 p-4 rounded-full mb-4">
-          <img src="../Public/assets/svg/passportphoto.svg" alt="Photo Icon" class="h-12 w-12">
+          <img src="/Public/assets/svg/passportphoto.svg" alt="Photo Icon" class="h-12 w-12">
         </div>
         <span class="text-lg font-medium text-gray-800">Passport Photo</span>
         <p class="text-gray-500 mt-2 text-sm">Recent colored passport-size photograph</p>
@@ -388,7 +388,7 @@
       <!-- Box 4 -->
       <div class="flex flex-col items-center justify-center w-[280px] h-[280px] bg-white shadow-md rounded-xl text-center p-6 transition hover:shadow-lg hover:-translate-y-1">
         <div class="bg-blue-50 p-4 rounded-full mb-4">
-          <img src="../Public/assets/svg/bankstatement.svg" alt="Bank Statement Icon" class="h-12 w-12">
+          <img src="/Public/assets/svg/bankstatement.svg" alt="Bank Statement Icon" class="h-12 w-12">
         </div>
         <span class="text-lg font-medium text-gray-800">Bank Statements</span>
         <p class="text-gray-500 mt-2 text-sm">3 months of your most recent bank statements</p>
@@ -399,7 +399,7 @@
   <!-- How to Apply Section -->
   <div class="relative w-full h-[600px] bg-gradient-to-br from-spectrum-primary to-blue-600">
     <!-- Background Image with overlay -->
-    <img src="../Public/assets/Images/background2.jpg" alt="Background" class="w-full h-full object-cover absolute inset-0 mix-blend-overlay opacity-30">
+    <img src="/Public/assets/Images/dashboardimage.jpg" alt="Background" class="w-full h-full object-cover absolute inset-0 mix-blend-overlay opacity-30">
 <!-- Content -->
 <div class="relative z-10 w-full h-full flex flex-col justify-center">
     <div class="py-12 px-6">
@@ -581,23 +581,34 @@
   </div>
 
   <!-- Footer -->
-<!-- Footer Placeholder -->
-<div id="footer-container"></div>
+ <!-- Footer -->
+ <div id="footer-container" class="bg-gray-800 text-white py-6"></div>
 
-<!-- Load Footer -->
-<script>
-  fetch('/src/components/footer.html')
-    .then(res => {
-      if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
-      return res.text();
-    })
-    .then(data => {
-      document.getElementById('footer-container').innerHTML = data;
-    })
-    .catch(err => console.error('Failed to load footer:', err));
-</script>
+ <!-- Scripts -->
+ <script>
+     // Load navigation bar
+     fetch('/src/components/navbar.html')
+         .then(res => {
+             if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+             return res.text();
+         })
+         .then(res => res.text())
+         .then(data => {
+             document.getElementById('navbar-container').innerHTML = data;
+         })
+         .catch(err => console.error('Failed to load navigation:', err));
 
-
+     // Load footer
+     fetch('/src/components/footer.html')
+         .then(res => {
+             if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+             return res.text();
+         })
+         .then(data => {
+             document.getElementById('footer-container').innerHTML = data;
+         })
+         .catch(err => console.error('Failed to load footer:', err));
+ </script>
   <!-- Floating WhatsApp Button -->
   <div class="fixed bottom-6 right-6 z-50">
     <a href="https://wa.me/260123456789" class="bg-green-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:bg-green-600 transition transform hover:scale-110">
