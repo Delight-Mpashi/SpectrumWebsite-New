@@ -7,13 +7,7 @@ const port = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/components', express.static(path.join(__dirname, 'src/components')));
 
-app.use('/assets', express.static(path.join(__dirname, 'src/assets')));
-app.use('/styles', express.static(path.join(__dirname, 'src/styles')));
-app.use('/scripts', express.static(path.join(__dirname, 'src/scripts')));
-app.use('/images', express.static(path.join(__dirname, 'src/images')));
-app.use('/fonts', express.static(path.join(__dirname, 'src/fonts')));
 app.use('/Public/assets/Images', express.static(path.join(__dirname, 'public/assets/Images')));
 app.use('/Public/assets/Fonts', express.static(path.join(__dirname, 'public/assets/Fonts')));
 app.use('/Public/assets/Styles', express.static(path.join(__dirname, 'public/assets/Styles')));
