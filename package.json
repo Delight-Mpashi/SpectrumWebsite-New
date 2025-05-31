@@ -20,5 +20,13 @@
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.3",
     "tailwindcss": "^4.1.7"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Delight-Mpashi/SpectrumWebsite-New.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Delight-Mpashi/SpectrumWebsite-New/issues"
+  },
+  "homepage": "https://github.com/Delight-Mpashi/SpectrumWebsite-New#readme"
 }
