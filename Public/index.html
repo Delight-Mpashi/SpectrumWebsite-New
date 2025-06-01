@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/src/styles/main.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -32,239 +33,14 @@
     }
   </script>
   <title>Spectrum Credit - Loan Application</title>
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f8fafc;
-      scroll-behavior: smooth;
-    }
-    
-    /* Navigation Bar */
-    .navigation-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background-color: white;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
 
-    .logo img {
-      height: 50px;
-      transition: transform 0.3s ease;
-    }
-    .logo:hover img {
-      transform: scale(1.05);
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: #334155;
-      font-size: 14px;
-      font-weight: 500;
-      padding: 8px 12px;
-      transition: all 0.3s ease;
-      border-radius: 6px;
-      position: relative;
-    }
-
-    .nav-links a:after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 2px;
-      bottom: 0;
-      left: 0;
-      background-color: #1d62e3;
-      transition: width 0.3s ease;
-    }
-
-    .nav-links a:hover:after {
-      width: 100%;
-    }
-
-    .nav-links a:hover {
-      color: #1d62e3;
-    }
-
-    /* Dropdown */
-    .dropdown {
-      position: relative;
-    }
-
-    .dropdown button {
-      background-color: #1d62e3;
-      color: white;
-      padding: 10px 16px;
-      font-size: 14px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      border-radius: 6px;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .dropdown button:hover {
-      background-color: #1a56cb;
-      transform: translateY(-1px);
-    }
-
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background-color: white;
-      min-width: 220px;
-      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
-      z-index: 999;
-      border-radius: 8px;
-      overflow: hidden;
-      animation: fadeIn 0.3s ease-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .dropdown-content a {
-      color: #334155;
-      padding: 12px 16px;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 500;
-      transition: all 0.2s ease;
-    }
-
-    .dropdown-content a i {
-      width: 20px;
-      text-align: center;
-    }
-
-    .dropdown-content a:hover {
-      background-color: #f1f5f9;
-      color: #1d62e3;
-      padding-left: 20px;
-    }
-
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
-    
-    /* Form styling */
-    .form-box {
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    }
-    
-    /* Input focus effect */
-    .form-input:focus {
-      box-shadow: 0 0 0 3px rgba(29, 98, 227, 0.2);
-    }
-    
-    /* Step circles */
-    .step-circle {
-      transition: all 0.3s ease;
-      position: relative;
-    }
-    .step-circle:hover {
-      transform: scale(1.05);
-      box-shadow: 0 10px 25px rgba(29, 98, 227, 0.3);
-    }
-    .step-number {
-      position: absolute;
-      top: -10px;
-      right: -10px;
-      background-color: #f59e0b;
-      color: white;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      font-size: 14px;
-    }
-    
-    /* Loan calculator */
-    .loan-calculator {
-      background: linear-gradient(135deg, #1d62e3 0%, #4caf50 100%);
-    }
-    
-    /* Tooltip */
-    .tooltip {
-      position: relative;
-    }
-    .tooltip-text {
-      visibility: hidden;
-      width: 200px;
-      background-color: #1e293b;
-      color: #fff;
-      text-align: center;
-      border-radius: 6px;
-      padding: 8px;
-      position: absolute;
-      z-index: 1;
-      bottom: 125%;
-      left: 50%;
-      transform: translateX(-50%);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .tooltip:hover .tooltip-text {
-      visibility: visible;
-      opacity: 1;
-    }
-    
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-      .navigation-bar {
-        flex-direction: column;
-        padding: 1rem;
-      }
-      .nav-links {
-        margin-top: 1rem;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-      /* Form adjustments */
-      .compact-form {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      }
-      
-      .form-input:focus {
-        box-shadow: 0 0 0 2px rgba(29, 98, 227, 0.2);
-      }
-    }
-  </style>
 </head>
 <body>
   <!-- Navigation -->
   <!-- Navigation -->
   <div class="navigation-bar">
     <div class="logo">
-      <img src="/Public/assets/Images/spectrum-credit-logo-brighter transsparent (1).png" alt="spectrum logo">
+      <img src="/Public/assets/Images/scllogo.png" alt="spectrum logo">
     </div>
 
     <!-- Nav Right -->
@@ -410,7 +186,7 @@
         <div class="flex flex-col items-center text-center">
           <div class="step-circle w-[180px] h-[180px] rounded-full overflow-hidden border-4 border-white shadow-lg mb-4 relative">
             <div class="absolute inset-0 flex items-center justify-center">
-              <img src="../Public/assets/svg/Step 1.png" alt="Step 1" class="max-w-[80%] max-h-[80%] object-contain">
+              <img src="/Public/assets/svg/Step 1.png" alt="Step 1" class="max-w-[80%] max-h-[80%] object-contain">
             </div>
             <div class="step-number">1</div>
           </div>
@@ -422,7 +198,7 @@
         <div class="flex flex-col items-center text-center">
           <div class="step-circle w-[180px] h-[180px] rounded-full overflow-hidden border-4 border-white shadow-lg mb-4 relative">
             <div class="absolute inset-0 flex items-center justify-center">
-              <img src="../Public/assets/svg/Step 2.png" alt="Step 2" class="max-w-[80%] max-h-[80%] object-contain">
+              <img src="/Public/assets/svg/Step 2.png" alt="Step 2" class="max-w-[80%] max-h-[80%] object-contain">
             </div>
             <div class="step-number">2</div>
           </div>
@@ -434,7 +210,7 @@
         <div class="flex flex-col items-center text-center">
           <div class="step-circle w-[180px] h-[180px] rounded-full overflow-hidden border-4 border-white shadow-lg mb-4 relative">
             <div class="absolute inset-0 flex items-center justify-center">
-              <img src="../Public/assets/svg/Step 3.png" alt="Step 3" class="max-w-[80%] max-h-[80%] object-contain">
+              <img src="/Public/assets/svg/Step 3.png" alt="Step 3" class="max-w-[80%] max-h-[80%] object-contain">
             </div>
             <div class="step-number">3</div>
           </div>
@@ -462,7 +238,7 @@
         <div class="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition">
           <div class="flex items-center mb-4">
             <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
-              <img src="../Public/assets/Images/mary.jpg" alt="Customer" class="w-full h-full object-cover">
+              <img src="/Public/assets/Images/mary.jpg" alt="Customer" class="w-full h-full object-cover">
             </div>
             <div>
               <h4 class="font-bold">Mary Chanda</h4>
@@ -482,7 +258,7 @@
         <div class="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition">
           <div class="flex items-center mb-4">
             <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
-              <img src="../Public/assets/Images/john.png" alt="Customer" class="w-full h-full object-cover">
+              <img src="/Public/assets/Images/john.png" alt="Customer" class="w-full h-full object-cover">
             </div>
             <div>
               <h4 class="font-bold">John Banda</h4>
@@ -502,7 +278,7 @@
         <div class="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition">
           <div class="flex items-center mb-4">
             <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
-              <img src="../Public/assets/Images/sarah.png" alt="Customer" class="w-full h-full object-cover">
+              <img src="/Public/assets/Images/sarah.png" alt="Customer" class="w-full h-full object-cover">
             </div>
             <div>
               <h4 class="font-bold">Sarah Mwansa</h4>
@@ -587,7 +363,7 @@
           <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
               <!-- Column 1 -->
               <div>
-                  <img src="/assets/images/spectrum-credit-logo.png" alt="Spectrum Logo" class="h-12 mb-4" loading="lazy">
+                  <img src="/Public/assets/Images/scllogo.png" alt="Spectrum Logo" class="h-12 mb-4" loading="lazy">
                   <p class="text-gray-300 text-sm">There When you Need Us!</p>
                   <div class="flex mt-4 space-x-4">
                       <a href="#" aria-label="Facebook" class="text-gray-300 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
