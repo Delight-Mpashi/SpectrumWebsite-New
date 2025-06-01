@@ -103,4 +103,11 @@
   .dropdown:hover .dropdown-content {
     display: block;
   }
-  
+
+  .navigation-bar {
+    @apply bg-white shadow-md;
+}
+
+.logo img {
+    @apply h-12;
+}

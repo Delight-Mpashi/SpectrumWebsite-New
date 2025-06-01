@@ -4,22 +4,21 @@ const fs = require('fs');
 const app = express();
 const port = process.env.PORT || 3001;
 
-// Serve static files from Public directory
+// ✅ Serve static files from 'public' directory
 app.use(express.static(path.join(__dirname, 'public'), {
-  // Additional static file options
-  maxAge: '1d', // Cache static assets for 1 day
-  setHeaders: (res, path) => {
-    if (path.endsWith('.jpg') || path.endsWith('.png') || path.endsWith('.webp')) {
+  maxAge: '1d',
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.jpg') || filePath.endsWith('.png') || filePath.endsWith('.webp')) {
       res.setHeader('Cache-Control', 'public, max-age=86400');
     }
   }
 }));
 
-// Root route
+// ✅ Root route - load index.html
 app.get('/', (req, res) => {
   const indexPath = path.join(__dirname, 'public', 'index.html');
-  
-  // Verify file exists before sending
+  console.log(`Looking for index.html at: ${indexPath}`); // Helpful log
+
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
   } else {
@@ -27,15 +26,15 @@ app.get('/', (req, res) => {
   }
 });
 
-// Test route for image debugging
+// ✅ Test image route (optional)
 app.get('/test-image', (req, res) => {
   const imagePath = path.join(__dirname, 'public', 'assets', 'images', 'dashboardimage.jpg');
-  
+
   if (fs.existsSync(imagePath)) {
     res.json({
       exists: true,
       path: imagePath,
-      relativePath: 'public/assets/images/dashboardimage.jpg'
+      relativePath: '/assets/images/dashboardimage.jpg'
     });
   } else {
     res.status(404).json({
@@ -46,18 +45,28 @@ app.get('/test-image', (req, res) => {
   }
 });
 
-// 404 handler
+// ✅ 404 handler - use lowercase 'public'
 app.use((req, res) => {
-  res.status(404).sendFile(path.join(__dirname, 'Public', '404.html'));
+  const notFoundPath = path.join(__dirname, 'public', '404.html');
+  if (fs.existsSync(notFoundPath)) {
+    res.status(404).sendFile(notFoundPath);
+  } else {
+    res.status(404).send('404 Not Found');
+  }
 });
 
-// Error handler
+// ✅ 500 error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).sendFile(path.join(__dirname, 'public', '500.html'));
+  const errorPath = path.join(__dirname, 'public', '500.html');
+  if (fs.existsSync(errorPath)) {
+    res.status(500).sendFile(errorPath);
+  } else {
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-  console.log(`Static files served from: ${path.join(__dirname, 'Public')}`);
+  console.log(`✅ Server running at: http://localhost:${port}`);
+  console.log(`📁 Static files served from: ${path.join(__dirname, 'public')}`);
 });
