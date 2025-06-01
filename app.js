@@ -35,7 +35,7 @@ app.get('/test-image', (req, res) => {
     res.json({
       exists: true,
       path: imagePath,
-      relativePath: '/assets/images/dashboardimage.jpg'
+      relativePath: 'public/assets/images/dashboardimage.jpg'
     });
   } else {
     res.status(404).json({
