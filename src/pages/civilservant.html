@@ -36,10 +36,11 @@
                 background-blend-mode: overlay;
             }
             .navigation-bar {
-                @apply bg-white shadow-md;
+                background-color: white;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06); /* Equivalent to Tailwind's shadow-md */
             }
             .logo img {
-                @apply h-12;
+                height: 3rem; /* Equivalent to h-12 in TailwindCSS */
             }
         }
     </style>

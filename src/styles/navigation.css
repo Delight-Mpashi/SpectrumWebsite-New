@@ -105,9 +105,10 @@
   }
 
   .navigation-bar {
-    @apply bg-white shadow-md;
+    background-color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .logo img {
-    @apply h-12;
+    height: 3rem; /* Equivalent to h-12 in Tailwind CSS */
 }
